@@ -1,9 +1,49 @@
-// Your styles go here
-body {
-  background: #202020 url('/images/footer-bg.jpg') repeat;
-  min-width: 1200px;
+//Nav rules
+@use 'nav.scss';
+
+//Variables
+$links: #0d6efd;
+$text: #FFF;
+$width: 100%;
+$liststyle: none;
+$textdecor: none;
+$position: relative;
+$letterspace: 1px;
+$transformtext: uppercase;
+$float: left;
+$margin: auto;
+$minwidth: 1200px;
+
+//List
+$numbers: 1 2 3 4 5 6 7 8 9 10 11 12;
+
+//mixins
+@mixin reset(){
   margin: 0;
   padding: 0;
+}
+
+//makes a column with 100% width
+@mixin make-column($width){
+  width: $width;
+}
+
+//Makes 12 equal columns
+@mixin column-width($number) {
+  .column-#{$number} {
+    width: ($number * 100%/12)
+  }
+}
+
+@mixin sizing(){
+  display: block;
+  width: 100%;
+}
+
+body {
+  background: #202020 url('/images/footer-bg.jpg') repeat;
+  min-width: $minwidth;
+  @include reset;
 }
 
 body,
@@ -16,25 +56,21 @@ select {
   line-height: 1.75em;
 }
 
+/* Main Text */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  letter-spacing: $letterspace;
+  text-transform: $transformtext;
   font-weight: 300;
-}
 
-h1 a,
-h2 a,
-h3 a,
-h4 a,
-h5 a,
-h6 a {
-  color: inherit;
-  text-decoration: none;
+  a {
+    color: inherit;
+    text-decoration: $textdecor;
+  }
 }
 
 strong,
@@ -49,17 +85,17 @@ i {
 }
 
 a {
-  color: #0d6efd;
+  color: $links;
 }
 
 sub {
-  position: relative;
+  position: $position;
   top: 0.5em;
   font-size: 0.8em;
 }
 
 sup {
-  position: relative;
+  position: $position;
   top: -0.5em;
   font-size: 0.8em;
 }
@@ -80,38 +116,31 @@ table {
 header {
   margin-bottom: 2em;
   line-height: 1.7em;
-}
 
-header h2 {
-  font-size: 2.5em;
-}
+  h2 {
+    font-size: 2.5em;
+  }
 
-header .byline {
-  display: block;
-  margin: 0.5em 0 0 0;
-  padding: 0 0 0.5em 0;
-  text-transform: uppercase;
-  font-size: 1.4em;
+  .byline {
+    display: block;
+    margin: 0.5em 0 0 0;
+    padding: 0 0 0.5em 0;
+    text-transform: $transformtext;
+    font-size: 1.4em;
+  }
 }
 
 section,
 article {
   margin-bottom: 3em;
-}
 
-section > :last-child,
-article > :last-child {
-  margin-bottom: 0;
-}
-
-section:last-child,
-article:last-child {
-  margin-bottom: 0;
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 blockquote {
-  margin: 0;
-  padding: 0;
+  @include reset;
   border: none;
   font-style: normal;
 }
@@ -122,311 +151,218 @@ footer {
 
 .container {
   width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
+  margin-left: $margin;
+  margin-right: $margin;
 
-.container.small {
-  width: 900px;
-}
-
-.container.big {
-  width: 100%;
-  max-width: 1500px;
-  min-width: 1200px;
-}
-
-.row section,
-.row article {
-  margin-bottom: 0;
-}
-
-.row [class*='column-'] {
-  padding: 50px 0 0 50px;
-  float: left;
-  box-sizing: border-box;
+  &.small {
+    width: 900px;
+  }
+  
+  &.big {
+    width: 100%;
+    max-width: 1500px;
+    min-width: $minwidth;
+  }
 }
 
 .row {
   margin-left: -50px;
+
+  section,
+  article {
+    margin-bottom: 0;
+  }
+
+  [class*='column-'] {
+    padding: 50px 0 0 50px;
+    float: $float;
+    box-sizing: border-box;
+  }
+
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+    height: 0;
+  }
 }
 
-.row:after {
-  content: '';
-  display: block;
-  clear: both;
-  height: 0;
-}
-
-.column-1,
-.column-2,
-.column-3,
-.column-4,
-.column-5,
-.column-6,
-.column-7.column-8,
-.column-9,
-.column-10,
-.column-11,
-.column-12 {
-  width: 100%;
-}
-
+/* Media Queries */
 @media all and (min-width: 576px) {
-  .column-1 {
-    width: 8.33333%;
-  }
-
-  .column-2 {
-    width: 16.66667%;
-  }
-
-  .column-3 {
-    width: 25%;
-  }
-
-  .column-4 {
-    width: 33.33333%;
-  }
-
-  .column-5 {
-    width: 41.66667%;
-  }
-
-  .column-6 {
-    width: 50%;
-  }
-
-  .column-7 {
-    width: 58.33333%;
-  }
-
-  .column-8 {
-    width: 66.66667%;
-  }
-
-  .column-9 {
-    width: 75%;
-  }
-
-  .column-10 {
-    width: 83.33333%;
-  }
-
-  .column-11 {
-    width: 91.66667%;
-  }
-
-  .column-12 {
-    width: 100%;
+   @each $number in $numbers {
+    @include column-width($number);
   }
 }
 
+/* Images */
 .image {
   display: inline-block;
+  
+  img {
+    @include sizing;
+  }
+
+  &.featured {
+    @include sizing;
+    margin: 0 0 2em 0;
+  }
+
+  &.full {
+    @include sizing;
+    margin-bottom: 2em;
+  }
+
+  &.left {
+    float: $float;
+    margin: 0 2em 2em 0;
+  }
+
+  &.centered {
+    display: block;
+    margin: 0 0 2em 0;
+
+    img {
+      margin: 0 $margin;
+      width: auto;
+    }
+  }
+    
 }
 
-.image img {
-  display: block;
-  width: 100%;
+/* List */
+ul{
+  &.default {
+    @include reset;
+    list-style: $liststyle;
+
+    &.default li {
+      display: block;
+      padding: 2em 0em 1.25em 0em;
+      border-top: 1px solid #303030;
+
+      &:first-child {
+        padding-top: 0em;
+        border-top: none;
+      }
+    }
+
+    a {
+      text-decoration: $textdecor;
+      color: rgba(255, 255, 255, .5);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &.style1 {
+    @include reset;
+    list-style: $liststyle;
+
+    li {
+      padding: 0.60em 0em;
+      border-top: 1px solid;
+      border-color: rgba(0, 0, 0, .1);
+
+      &:first-child {
+        padding-top: 0;
+        border-top: 0;
+      }
+    }
+  }
+
+  &.style2 {
+    @include reset;
+    list-style: $liststyle;
+
+    li {
+      padding: 1.90em 0em 1.60em 0em;
+      border-top: 1px solid;
+      border-color: rgba(0, 0, 0, .1);
+
+      &:first-child {
+        padding-top: 0;
+        border-top: 0;
+      }
+    }
+
+    img {
+      float: $float;
+      padding-right: 1em;
+    }
+  }
+  &.style5 {
+    overflow: hidden;
+    margin: 0em 0em 1em 0em;
+    padding: 0em;
+    list-style: $liststyle;
+
+    li {
+      float: $float;
+      padding: 0.25em 0.25em;
+      line-height: 0;
+    }
+  }
 }
 
-.image.featured {
-  display: block;
-  width: 100%;
-  margin: 0 0 2em 0;
-}
-
-.image.full {
-  display: block;
-  width: 100%;
-  margin-bottom: 2em;
-}
-
-.image.left {
-  float: left;
-  margin: 0 2em 2em 0;
-}
-
-.image.centered {
-  display: block;
-  margin: 0 0 2em 0;
-}
-
-.image.centered img {
-  margin: 0 auto;
-  width: auto;
-}
-
-ul.default {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-ul.default li {
-  display: block;
-  padding: 2em 0em 1.25em 0em;
-  border-top: 1px solid #303030;
-}
-
-ul.default li:first-child {
-  padding-top: 0em;
-  border-top: none;
-}
-
-ul.default a {
-  text-decoration: none;
-  color: rgba(255, 255, 255, .5);
-}
-
-ul.default a:hover {
-  text-decoration: underline;
-}
-
-ul.style1 {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-ul.style1 li {
-  padding: 0.60em 0em;
-  border-top: 1px solid;
-  border-color: rgba(0, 0, 0, .1);
-}
-
-ul.style1 li:first-child {
-  padding-top: 0;
-  border-top: 0;
-}
-
-ul.style2 {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-ul.style2 li {
-  padding: 1.90em 0em 1.60em 0em;
-  border-top: 1px solid;
-  border-color: rgba(0, 0, 0, .1);
-}
-
-ul.style2 li:first-child {
-  padding-top: 0;
-  border-top: 0;
-}
-
-ul.style2 img {
-  float: left;
-  padding-right: 1em;
-}
-
-ul.style5 {
-  overflow: hidden;
-  margin: 0em 0em 1em 0em;
-  padding: 0em;
-  list-style: none;
-}
-
-ul.style5 li {
-  float: left;
-  padding: 0.25em 0.25em;
-  line-height: 0;
-}
-
+/* Button */
 .button {
-  position: relative;
+  position: $position;
   display: inline-block;
   margin-top: 0.5em;
   padding: 0.50em 1.5em;
-  background: #0d6efd;
+  background: $links;
   border-radius: 6px;
-  text-decoration: none;
-  text-transform: uppercase;
+  text-decoration: $textdecor;
+  text-transform: $transformtext;
   font-size: 1.1em;
-  color: #FFF;
+  color: $text;
   transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
   cursor: pointer;
+
+  &:hover {
+    background: $links;
+    color: $text !important;
+  }
 }
 
-.button:hover {
-  background: #0d6efd;
-  color: #FFF !important;
-}
 
 .header {
-  position: relative;
-  background: #FFF;
-}
+  position: $position;
+  background: $text;
 
-.header .container {
-  position: relative;
-  padding: 4em 0em;
+  .container {
+    position: $position;
+    padding: 4em 0em;
+  }
 }
 
 .logo {
   position: absolute;
   left: 0em;
   top: 3em;
+
+  a {
+    display: block;
+    text-decoration: $textdecor;
+    font-size: 2.8em;
+    font-weight: 600;
+  }
 }
 
-.logo a {
-  display: block;
-  text-decoration: none;
-  font-size: 2.8em;
-  font-weight: 600;
-}
-
-.nav {
-  position: absolute;
-  right: 0em;
-  top: 2.2em;
-}
-
-.nav ul {
-  list-style-type: none;
-}
-
-.nav ul li {
-  float: left;
-}
-
-.nav ul li:last-child {
-  padding-right: 0;
-}
-
-.nav ul li a,
-.nav ul li span {
-  display: block;
-  margin-left: 0.7em;
-  padding: 0.80em 1.2em;
-  letter-spacing: 0.06em;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 1.1em;
-  outline: 0;
-  color: #333;
-}
-
-.nav li.active a {
-  background: #0d6efd;
-  border-radius: 5px;
-  color: #FFF;
-}
 
 .banner {
-  position: relative;
+  position: $position;
   padding: 12em 0em;
   background: url('/images/banner.jpg') no-repeat center;
   background-size: cover;
-  color: #fff;
+  color: $text;
 }
 
 .page {
-  position: relative;
-  background: #fff;
+  position: $position;
+  background: $text;
 }
 
 .main {
@@ -439,57 +375,58 @@ ul.style5 li {
 }
 
 .footer {
-  position: relative;
+  position: $position;
   color: rgba(255, 255, 255, .4);
-}
 
-.footer h2 {
-  padding-bottom: 1.5em;
-  font-size: 1.6em;
-  color: #FFF;
-}
+  h2 {
+    padding-bottom: 1.5em;
+    font-size: 1.6em;
+    color: $text;
+  }
 
-.footer strong {
-  color: rgba(255, 255, 255, .7);
+  strong {
+    color: rgba(255, 255, 255, .7);
+  }
 }
 
 .copyright {
-  position: relative;
+  position: $position;
   padding: 3em 0em;
   border-top: 1px solid #303030;
-  letter-spacing: 1px;
+  letter-spacing: $letterspace;
   text-align: center;
   color: rgba(255, 255, 255, .4);
-}
 
-.copyright a {
-  text-decoration: none;
-  color: rgba(255, 255, 255, .4) !important;
+  a {
+    text-decoration: $textdecor;
+    color: rgba(255, 255, 255, .4) !important;
+  }
 }
 
 .marketing {
-  position: relative;
-}
+  position: $position;
 
-.marketing header h2 {
-  font-size: 1.6em;
+  header h2 {
+    font-size: 1.6em;
+  }
 }
 
 .featured {
-  position: relative;
+  position: $position;
+
+  .divider {
+    border-bottom: 1px solid #303030;
+  }
+
+  .box {
+    background: $text;
+    padding: 1.4em;
+    font-size: 0.95em;
+    border-radius: 5px;
+  }
 }
 
-.featured .divider {
-  border-bottom: 1px solid #303030;
-}
-
-.featured .box {
-  background: #FFF;
-  padding: 1.4em;
-  font-size: 0.95em;
-  border-radius: 5px;
-}
-
+/* Quote in Footer */
 .balloon {
   padding: 1.87em;
   background: url('/images/balloon-bg.jpg') repeat left top;
@@ -497,12 +434,12 @@ ul.style5 li {
   line-height: 180%;
   font-size: 1.2em;
   color: #333;
+
+  strong {
+    color: #333 !important;
+  }
 }
 
 .ballon-bgbtm {
   height: 1.87em;
-}
-
-.balloon strong {
-  color: #333 !important;
 }
